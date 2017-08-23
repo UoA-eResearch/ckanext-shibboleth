@@ -239,8 +239,7 @@ class ShibbolethIdentifierPlugin(object):
         else:  # user is None:
             log.debug('User does not exists, creating new one.')
 
-            basename = unicode(fullname, errors='ignore').lower().replace(' ',
-                                                                          '_')
+            basename = eppn
             username = basename
             suffix = 0
             while not model.User.check_name_available(username):
