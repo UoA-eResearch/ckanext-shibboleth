@@ -20,6 +20,9 @@ from urlparse import urlparse, urlunparse
 
 log = logging.getLogger("ckanext.shibboleth")
 
+from paste.registry import Registry
+from ckan.lib.cli import MockTranslator
+import pylons
 
 SHIBBOLETH = 'shibboleth'
 
@@ -54,6 +57,8 @@ class ShibbolethIdentifierPlugin(object):
         self.mail = mail
         self.fullname = fullname
         self.extra_keys = {}
+
+        self.groups = kwargs['groups']
 
         self.check_auth_key = kwargs['check_auth_key']
         self.check_auth_value = kwargs['check_auth_value']
@@ -254,6 +259,35 @@ class ShibbolethIdentifierPlugin(object):
             model.Session.add(user)
             model.Session.flush()
             log.info('Created new user {usr}'.format(usr=fullname))
+
+        groups = env.get(self.groups, None)
+
+        if groups:
+            groups = groups.split(";")
+            log.debug("groups: {}".format(sorted(groups)))
+            orgs = toolkit.get_action('organization_list')(data_dict={
+              'all_fields': True,
+              'include_extras': True
+            })
+            log.debug("orgs: {}".format(orgs))
+            add_member = toolkit.get_action('organization_member_create')
+
+            # Ensure there's a pylons.translator object
+            registry = Registry()
+            registry.prepare()
+            registry.register(pylons.translator, MockTranslator())
+
+            for o in orgs:
+                for e in o['extras']:
+                    if e['key'] == 'ecgroup' and e['value'] in groups:
+                        log.debug("Adding {} to {}".format(user.name, o['name']))
+                        add_member(context={
+                          'user': 'default'
+                        }, data_dict={
+                          'id': o['name'],
+                          'username': user.name,
+                          'role': 'member'
+                        })
 
         model.Session.commit()
         model.Session.remove()

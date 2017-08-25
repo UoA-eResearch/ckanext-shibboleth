@@ -28,6 +28,7 @@ Add the ``plugin:shibboleth`` section, customizing the env var names:
     eppn = YOUR_HEADER_FOR_eppn
     mail = YOUR_HEADER_FOR_mail
     fullname = YOUR_HEADER_FOR_cn
+    groups = YOUR_HEADER_FOR_groups
 
     check_auth_key=AUTH_TYPE
     check_auth_value=shibboleth
