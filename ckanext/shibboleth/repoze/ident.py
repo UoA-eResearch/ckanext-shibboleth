@@ -265,12 +265,12 @@ class ShibbolethIdentifierPlugin(object):
         if groups:
             groups = groups.split(";")
             log.debug("groups: {}".format(sorted(groups)))
-            orgs = toolkit.get_action('organization_list')(data_dict={
+            orgs = toolkit.get_action('group_list')(data_dict={
               'all_fields': True,
               'include_extras': True
             })
             log.debug("orgs: {}".format(orgs))
-            add_member = toolkit.get_action('organization_member_create')
+            add_member = toolkit.get_action('group_member_create')
 
             # Ensure there's a pylons.translator object
             registry = Registry()
