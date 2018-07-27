@@ -5,11 +5,11 @@ Install
 
 You can install ckanext-shibboleth either with
 
-    pip install -e git+git://github.com/Prashantguptanz/ckanext-shibboleth.git#egg=ckanext-shibboleth
+    pip install -e git+git://github.com/UoA-eResearch/ckanext-shibboleth.git#egg=ckanext-shibboleth
 	
 or
 
-    git clone https://github.com/geosolutions-it/ckanext-shibboleth.git
+    git clone https://github.com/UoA-eResearch/ckanext-shibboleth.git
     python setup.py install
         
 	
