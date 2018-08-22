@@ -232,7 +232,7 @@ class ShibbolethIdentifierPlugin(object):
             return None
 
         user = model.Session.query(model.User).autoflush(False) \
-            .filter_by(openid=eppn).first()
+            .filter_by(name=eppn).first()
 
         # Check if user information from shibboleth has changed
         if user:
