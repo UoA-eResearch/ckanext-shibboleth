@@ -70,9 +70,9 @@ class ShibbolethIdentifierPlugin(object):
 
         controller = 'ckanext.shibboleth.controller:ShibbolethController'
 
-        self.login_url = url_for(controller=controller, action='shiblogin')
-        self.login_form_url = url_for(controller='user', action='login')
-        self.logout_url = url_for(controller='user', action='logout')
+        self.login_url = "/shibboleth/login"
+        self.login_form_url = "/user/login"
+        self.logout_url = "/user/logout"
 
     def challenge(self, environ, status, app_headers, forget_headers):
         '''
@@ -93,6 +93,8 @@ class ShibbolethIdentifierPlugin(object):
         log.info("ShibbolethIdentifierPlugin :: challenge")
 
         request = Request(environ)
+	if request.path != self.login_url:
+            return None
 
         locale_default = environ.get('CKAN_LANG_IS_DEFAULT', True)
         locale = environ.get('CKAN_LANG', None)
